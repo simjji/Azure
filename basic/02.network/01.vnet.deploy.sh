@@ -8,7 +8,8 @@ IFS=$'\n\t'
 
 usage() { echo "Usage: $0 -i <subscriptionId> -g <resourceGroupName> -n <deploymentName> -l <resourceGroupLocation>" 1>&2; exit 1; }
 
-declare subscriptionId="7b13dc94-2b54-4cdf-a247-bbdebdb97f4f"
+#declare subscriptionId="7b13dc94-2b54-4cdf-a247-bbdebdb97f4f"
+declare subscriptionId=`az account show | jq -r '.id'`
 declare resourceGroupName=""
 declare deploymentName=""
 declare resourceGroupLocation=""
@@ -92,7 +93,7 @@ az account set --subscription $subscriptionId
 if [ $(az group exists --name $resourceGroupName) == 'false' ]; then
     echo "Resource group with name" $resourceGroupName "could not be found. Creating new resource group.."
     (
-        set -x
+        set -x  #debug 명령이다.
         az group create --name $resourceGroupName --location $resourceGroupLocation 1> /dev/null
     )
     else
