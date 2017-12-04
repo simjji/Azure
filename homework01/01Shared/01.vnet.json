@@ -208,6 +208,7 @@
                 "idleTimeoutInMinutes": 4,
                 "dnsSettings" :{
                     "domainNameLabel": "[concat('ip', copyIndex(),'-', toLower(resourceGroup().name))]"
+                            }
             },
             "copy": {
                 "name": "ipcopy",
