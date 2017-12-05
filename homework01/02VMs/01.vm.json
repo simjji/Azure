@@ -29,13 +29,7 @@
         "adminUserId" : {
             "type": "string"
         },
-        "vaultResourceGroup" : {
-            "type": "string"
-        },
-        "vaultName" : {
-            "type": "string"
-        },
-        "secretName" : {
+        "sshKeyData" : {
             "type": "string"
         },
         "nic_name": {
@@ -47,15 +41,7 @@
     },
     "variables": {
         "netRGName":"boraNetRg02",
-        "subscriptionId":"[subscription().subscriptionId]",
-        "sshKeyData" : {
-            "reference" : {
-                "keyVault" : {
-                    "id": "[resourceId(subscription().subscriptionId,  parameters('vaultResourceGroup'), 'Microsoft.KeyVault/vaults', parameters('vaultName'))]"
-                },
-                "secretName": "[parameters('secretName')]"
-            }
-        }
+        "subscriptionId":"[subscription().subscriptionId]"
     },
     "resources": [
         {
@@ -93,7 +79,7 @@
                             "publicKeys": [
                                 {
                                     "path": "[concat('/home/',parameters('adminUserId'),'/.ssh/authorized_keys')]",
-                                    "keyData": "[variables('sshKeyData')]"
+                                    "keyData": "[parameters('sshKeyData')]"
                                 }
                             ]
                         }
