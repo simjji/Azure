@@ -16,7 +16,7 @@
         }
     },
     "variables": {
-        "repoUri" : "https://raw.githubusercontent.com/ceusee/Azure/master/homework01/02VMs/
+        "repoUri" : "https://raw.githubusercontent.com/ceusee/Azure/master/homework01/02VMs/"
     },
     "resources": [
         {
