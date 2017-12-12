@@ -29,7 +29,7 @@ if [ $(az group exists --name $resourceGroupName) == 'false' ]; then
     (
         set -x
         az group create --name $resourceGroupName --location $resourceGroupLocation 1> /dev/null
-    )subnetName
+    )
     else
     echo "Using existing resource group..."
 fi
