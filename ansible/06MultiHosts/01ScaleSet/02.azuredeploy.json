@@ -40,20 +40,20 @@
       }
     },
     "variables": {
-        "repoUri" : "https://raw.githubusercontent.com/msjo66/azureStudy/master/ansible/06MultiHosts/01ScaleSet/"
+        "repoUri" : "https://raw.githubusercontent.com/ceusee/Azure/master/ansible/06MultiHosts/01ScaleSet/"
     },
     "resources": [
         {
-            "apiVersion": "2017-05-10", 
-            "name": "myScleSet", 
-            "type": "Microsoft.Resources/deployments", 
-            "properties": { 
-              "mode": "Incremental", 
+            "apiVersion": "2017-05-10",
+            "name": "myScleSet",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+              "mode": "Incremental",
               "templateLink": {
                 "uri": "[concat(variables('repoUri'),'02.scalesetByImage.json')]",
                 "contentVersion": "1.0.0.0"
-              }, 
-              "parameters": { 
+              },
+              "parameters": {
                 "scalesetName":{"value": "[parameters('scalesetName')]"},
                 "adminUserId":{"value": "[parameters('adminUserId')]"},
                 "sshKeyData":{
@@ -71,7 +71,7 @@
                 "vnetName":{"value": "[parameters('vnetName')]"},
                 "subnetName":{"value": "[parameters('subnetName')]"},
                 "scalesetDnsName":{"value": "[parameters('scalesetDnsName')]"}
-              } 
+              }
             }
         }
     ]

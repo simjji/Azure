@@ -160,7 +160,7 @@ then
     then
         echo "already this vm is in ansible default inventory. Skipping.."
     else
-        echo "$FQDN ansible_ssh_private_key_file=/Users/minsoojo/.ssh/minscho_ebay.com.pem">> /etc/ansible/hosts
+        echo "$FQDN ansible_ssh_private_key_file=/Users/bochoi/.ssh/bochoi_ebay.com">> /etc/ansible/hosts
     fi
 
     ansible all -m ping
