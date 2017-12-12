@@ -3,40 +3,40 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "adminUserId": {
-            "value": "minsoojo"
+            "value": "bochoi"
         },
         "vaultResourceGroup": {
             "value": "minschoVaultRG01"
         },
         "vaultName": {
-            "value": "minschoVault"
+            "value": "boraVault"
         },
         "secretName": {
-            "value": "minschoPub"
+            "value": "boraPub"
         },
         "scalesetName": {
             "value": "mySet01"
         },
         "imgRG": {
-            "value": "minschoNetRG"
+            "value": "boraNetRg02"
         },
         "imgName": {
             "value": "centOSWithCommonTask"
         },
         "netRGName": {
-            "value": "minschoNetRG"
+            "value": "boraNetRg02"
         },
         "nicName": {
             "value": "mynic"
         },
         "vnetName": {
-            "value": "minschoVnet01"
+            "value": "boraVnet01"
         },
         "subnetName": {
-            "value": "testSubnet01"
+            "value": "boraSubnet01"
         },
         "scalesetDnsName": {
-            "value": "minschoss01"
+            "value": "borass01"
         }
     }
 }
