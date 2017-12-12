@@ -19,20 +19,20 @@
         }
     },
     "variables": {
-        "repoUri" : "https://raw.githubusercontent.com/msjo66/azureStudy/master/homework01/02VMs/"
+        "repoUri" : "https://raw.githubusercontent.com/ceusee/Azure/master/homework01/02VMs/"
     },
     "resources": [
         {
-            "apiVersion": "2017-05-10", 
-            "name": "vm0", 
-            "type": "Microsoft.Resources/deployments", 
-            "properties": { 
-              "mode": "Incremental", 
+            "apiVersion": "2017-05-10",
+            "name": "vm0",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+              "mode": "Incremental",
               "templateLink": {
                 "uri": "[concat(variables('repoUri'),'01.vm.json')]",
                 "contentVersion": "1.0.0.0"
-              }, 
-              "parameters": { 
+              },
+              "parameters": {
                 "vm_name":{"value": "vm0"},
                 "adminUserId":{"value": "[parameters('adminUserId')]"},
                 "sshKeyData":{
@@ -45,7 +45,7 @@
                 },
                 "nic_name":{"value": "vm0nic"},
                 "customData":{"value":"[parameters('customData')]"}
-              } 
+              }
             }
         }
     ],

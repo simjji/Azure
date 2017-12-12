@@ -138,6 +138,8 @@ fi
 #Start deployment
 echo "Starting deployment..."
 
+#public ip를 얻어오기 위해서 json output 중에 json query를 이용해서 찾아야 한다.
+# | jq -r '.properties.outputs.pubicIPId.value'`
 customData=$(cat $customDataFile|base64)
 set -x
 IP_RES_ID=`az group deployment create --name $deploymentName --resource-group $resourceGroupName --template-file $templateFilePath \
@@ -160,6 +162,6 @@ then
     else
         echo "$FQDN ansible_ssh_private_key_file=/Users/minsoojo/.ssh/minscho_ebay.com.pem">> /etc/ansible/hosts
     fi
-    
+
     ansible all -m ping
 fi
