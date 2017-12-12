@@ -29,7 +29,7 @@ if [ $(az group exists --name $resourceGroupName) == 'false' ]; then
     (
         set -x
         az group create --name $resourceGroupName --location $resourceGroupLocation 1> /dev/null
-    )
+    )subnetName
     else
     echo "Using existing resource group..."
 fi
@@ -42,5 +42,5 @@ az group deployment create \
 # ansible inventory에 넣으려면..
 pemFilePath=" ansible_ssh_private_key_file=/Users/bochoi/.ssh/bochoi_ebay.com"
 az vmss list-instance-public-ips \
---resource-group minschoTestRG01 \
+--resource-group boraSSR01 \
 --name mySet01 |jq -r '.[].dnsSettings.fqdn' | sed "s|$|$pemFilePath|" >> /etc/ansible/hosts
