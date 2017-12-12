@@ -30,7 +30,7 @@
             "value": "mynic"
         },
         "vnetName": {
-            "value": "boraVnet01"
+            "value": "boraVMR01"
         },
         "subnetName": {
             "value": "boraSubnet01"
