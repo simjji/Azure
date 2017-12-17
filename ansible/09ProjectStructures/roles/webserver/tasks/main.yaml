@@ -23,4 +23,3 @@
 - name: "httpd Listen IP 확인"
   debug:
     msg: '{{ listenStatus.stdout }}'
-handlers:
