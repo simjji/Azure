@@ -14,9 +14,12 @@
     src: website.conf
     dest: /etc/httpd/conf/httpd.conf
   become: true
-  notify: "httpd 재시작"
+  notify: "Restart httpd"
 - name: "재시작 먼저"
-  meta: flush_handlers
+  #meta: flush_handlers
+  debug:
+    msg: 'handlers start'
+#  meta: flush_handlers
 - name: "httpd Listen IP 기록"
   shell: "netstat -an|grep 80|grep LISTEN"
   register: listenStatus
