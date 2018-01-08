@@ -1,0 +1,13 @@
+  - command: lsblk -ln --output UUID {{ item }}1
+    register: uuid
+    with_items: '{{ parted_devices }}'
+    become: true
+    changed_when: uuid.rc != 0
+  - mount:
+      path: /data{{ item.0 }}
+      src: UUID={{ item.1.stdout }}
+      fstype: '{{fstype}}'
+      opts: 'noatime,nofail'
+      state: mounted
+    become: true
+    with_indexed_items: '{{ uuid.results }}'

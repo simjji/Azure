@@ -1,0 +1,21 @@
+---
+- name: set yum repository for mysql
+  copy:
+    src: mysql-community-5.7.repo
+    dest: /etc/yum.repos.d/
+  become: true
+- name: copy signature checking file for mysql
+  copy:
+    src: RPM-GPG-KEY-mysql
+    dest: /etc/pki/rpm-gpg
+  become: true
+- name: install mysql
+  yum:
+    name: mysql-community-server
+    state: present
+  become: true
+- name: install mysql python package
+  yum:
+    name: MySQL-python
+    state: present
+  become: true

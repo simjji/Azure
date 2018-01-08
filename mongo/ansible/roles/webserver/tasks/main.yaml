@@ -1,0 +1,33 @@
+---
+- name: Apache 설치
+  yum:
+    name: httpd
+    state: present
+  become: True
+- name: Apache 시작
+  service:
+    name: httpd
+    state: started
+    enabled: True
+  become: True
+- name: firewall 오픈
+  firewalld:
+    service: http
+    state: enabled
+    permanent: True
+    immediate: True
+  become: True
+- name: httpd.conf 파일 수정
+  template:
+    src: website.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+  become: True
+  notify: httpd 재시작
+- name: 홈페이지 업데이트
+  template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: 0644
+  become: True

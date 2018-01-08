@@ -1,0 +1,15 @@
+---
+- name: "MOTD 바꾸기"
+  template:
+    src: motd.j2
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: 0644
+  become: true
+- name: disable firewalld
+  service:
+    name: firewalld
+    state: stopped
+    enabled: false
+  become: true

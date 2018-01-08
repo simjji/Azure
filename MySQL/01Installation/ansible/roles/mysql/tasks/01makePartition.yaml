@@ -1,0 +1,20 @@
+- shell: "ls -al /dev/disk/azure/scsi1/lun{{item}}|awk '{print $NF}'|cut -d/ -f 4|sed -e 's|^|/dev/|'"
+  register: lsscsi_msg
+  become: true
+  with_items: '{{luns}}'
+  # 그냥 정보를 가져오는 것이니까, changed=0으로..
+  changed_when: lsscsi_msg.rc != 0
+  failed_when: lsscsi_msg.rc != 0
+- debug: msg='{{lsscsi_msg}}'
+- parted:
+    device: '{{ item.stdout }}'
+    number: 1
+    state: present
+  become: true
+  with_items: '{{ lsscsi_msg.results }}'
+# 아래는 찾은 device들을 list fact인 'parted_devices'에 등록하는 것임.
+- set_fact:
+    parted_devices: []
+- set_fact:
+    parted_devices: "{{ parted_devices }} + [ '{{ item.stdout }}' ]"
+  with_items: '{{ lsscsi_msg.results }}'

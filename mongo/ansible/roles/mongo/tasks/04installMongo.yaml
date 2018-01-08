@@ -1,0 +1,22 @@
+---
+- name: set yum repository for mongodb
+  copy:
+    src: mongodb-org-3.6.repo
+    dest: /etc/yum.repos.d/
+  become: true
+- name: install mongodb
+  yum:
+    name: mongodb-org
+    state: present
+  become: true
+# yum install을 하면 mongod 라는 user가 자동으로 만들어짐.
+#- name: software user for mongodb
+#  user:
+#    name: '{{mongouser}}'
+#  become: true
+#- name: set public key for user
+#  authorized_key:
+#    user: '{{mongouser}}'
+#    state: present
+#    key: "{{ lookup('file', mongouser_pubkey) }}"
+#  become: true

@@ -1,0 +1,38 @@
+#- shell: "ls -al /dev/disk/azure/scsi1/lun{{item}}|awk '{print $NF}'|cut -d/ -f 4|sed -e 's|^|/dev/|'"
+#  register: lsscsi_msg
+#  become: true
+#  with_items: '{{luns}}'
+# 그냥 정보를 가져오는 것이니까, changed=0으로..
+#  changed_when: lsscsi_msg.rc != 0
+#  failed_when: lsscsi_msg.rc != 0
+#- name: Ensure default user is present.
+#  mysql_user:
+#    name: "{{ mysqluser }}"
+#    host: 'localhost'
+#    password: "{{ mysql_user_password }}"
+#    priv: '*.*:ALL,GRANT'
+#    state: present
+- shell : "cat {{logpath}}/mysql.err|grep 'A temporary password is generated for root@localhost:'|awk '{print $NF}'"
+  register: temp_root_passwd_msg
+  become: true
+  changed_when: false
+  failed_when: temp_root_passwd_msg.rc != 0
+- set_fact:
+    temp_root_passwd: '{{temp_root_passwd_msg.stdout}}'
+# azure vault로 부터 설정할 mysql root 암호를 가져옴
+- local_action: "shell /usr/local/bin/az keyvault secret show --vault-name {{vaultName}} --name {{secretName}}|/usr/local/bin/jq -r '.value'"
+  register: pwd_from_vault
+  changed_when: false
+- set_fact:
+    root_passwd: '{{pwd_from_vault.stdout}}'
+- name: change root user password
+  shell: >
+    mysql --connect-expired-password -u root -p{{temp_root_passwd}} -NBe 
+    'ALTER USER USER() IDENTIFIED BY "{{root_passwd}}";'
+# 아래는 passwd를 my.cnf에 plain text로 넣기 때문에 좋지 않고, terminal에 들어가서 mysql_config_editor를 쓰는 것이 좋다.
+#- name: Copy user-my.cnf file with password credentials.
+#  template:
+#    src: "user-my.cnf.j2"
+#    dest: "/home/{{ osadmin }}/.my.cnf"
+#    owner: "{{ osadmin }}"
+#    mode: 0600

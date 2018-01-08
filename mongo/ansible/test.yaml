@@ -1,0 +1,17 @@
+---
+- hosts: all
+  vars:
+    luns: ['0','1']
+  tasks:
+      # lsscsi [5:*:*:0]과 lsscsi [5:*:*:1]의 결과의 마지막 column $NF를 찾고 싶은 것임.
+      # command를 쓰면 안되고, :는 yaml에서는 특수한 문자이므로 escape하기 위해서는 jinja {{ }}를 가지고 감쌌음.
+    - shell: "lsscsi [5{{':'}}*{{':'}}*{{':'}}{{item}}|awk '{print $NF}'"
+      register: lsscsi_msg
+      become: true
+      with_items: '{{luns}}'
+    - parted:
+        device: '{{ item.stdout }}'
+        number: 1
+        state: present
+      become: true
+      with_items: '{{ lsscsi_msg.results }}'

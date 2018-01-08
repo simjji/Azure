@@ -1,0 +1,64 @@
+[client]
+#password = your_password
+port = {{ mysql_port }}
+socket = /var/lib/mysql/mysql.sock
+
+[mysqld]
+port = {{ mysql_port }}
+bind-address = {{ mysql_bind_address }}
+datadir = {{ mysql_datadir }}
+socket = /var/lib/mysql/mysql.sock
+pid-file = /var/run/mysqld/mysqld.pid
+{% if mysql_skip_name_resolve %}
+skip-name-resolve
+{% endif %}
+{% if mysql_sql_mode %}
+sql_mode = {{ mysql_sql_mode }}
+{% endif %}
+
+# Logging configuration.
+{% if mysql_log_error == 'syslog' or mysql_log == 'syslog' %}
+syslog
+syslog-tag = {{ mysql_syslog_tag }}
+{% else %}
+{% if mysql_log %}
+log = {{ mysql_log }}
+{% endif %}
+log-error = {{ mysql_log_error }}
+{% endif %}
+
+{% if mysql_slow_query_log_enabled %}
+# Slow query log configuration.
+slow_query_log = 1
+slow_query_log_file = {{ mysql_slow_query_log_file }}
+long_query_time = {{ mysql_slow_query_time }}
+{% endif %}
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links = 0
+
+# User is ignored when systemd is used (fedora >= 15).
+user = mysql
+
+# http://dev.mysql.com/doc/refman/5.5/en/performance-schema.html
+;performance_schema
+
+# Memory settings.
+open_files_limit={{nofilelimit}}
+
+# Other settings.
+
+# InnoDB settings.
+
+[mysqldump]
+quick
+
+[mysqld_safe]
+pid-file = /var/run/mysqld/mysqld.pid
+
+{% if mysql_config_include_files | length %}
+# * IMPORTANT: Additional settings that can override those from this file!
+#   The files must end with '.cnf', otherwise they'll be ignored.
+#
+!includedir {{ mysql_config_include_dir }}
+{% endif %}

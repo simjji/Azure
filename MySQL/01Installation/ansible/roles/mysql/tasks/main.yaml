@@ -1,0 +1,28 @@
+---
+- name: initialize data disk
+  include_tasks: 01makePartition.yaml
+  when: makePart
+  tags: makePart
+# 아래 filesystem을 만들 대상은, 만약 위 makePart가 true라면 대상이 list로 나온다. false이면 partition은 되었다고 가정을
+# 해야 하기 때문에 filesystem을 만들어야 하는 대상을 찾아서 전달해야 한다.
+- name: make filesystem with variable.
+  include_tasks: 02makeFilesystem.yaml
+  when: mkfs
+  tags:
+    - makeFilesystem
+- name: mount filesystem
+  include_tasks: 03mountFilesystem.yaml
+  tags:
+    - mkfs
+- name: install mysql
+  include_tasks: 04installMysql.yaml
+  tags: installMysql
+- name: initialize mysql
+  include_tasks: 05initMysql.yaml
+  tags: initMysql
+- name: start mysql
+  include_tasks: 06startMysql.yaml
+  tags: startMysql
+- name: securing mysql
+  include_tasks: 07securingMysql.yaml
+  tags: securingMysql

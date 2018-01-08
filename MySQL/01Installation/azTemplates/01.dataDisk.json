@@ -1,0 +1,32 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dataDisk_name": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "comments": "single node mysql test data disk'.",
+            "type": "Microsoft.Compute/disks",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "name": "[parameters('dataDisk_name')]",
+            "apiVersion": "2017-03-30",
+            "location": "[resourceGroup().location]",
+            "tags": {"product": "mysql", "environment": "test"},
+            "scale": null,
+            "properties": {
+                "creationData": {
+                    "createOption": "Empty"
+                },
+                "diskSizeGB": 10
+            },
+            "dependsOn": []
+        }
+    ]
+}

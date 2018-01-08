@@ -1,0 +1,7 @@
+- filesystem:
+# mongod log를 보면 wiredtiger는 storage engine으로 xfs를 highly recommend한다고 되어 있음
+    fstype: '{{fstype}}'
+    dev: '{{ item }}1'
+#      opts: -cc ; bad block check를 하기 때문에 엄청 느림
+  become: true
+  with_items: '{{ parted_devices }}'

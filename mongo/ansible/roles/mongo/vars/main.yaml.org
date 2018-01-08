@@ -1,0 +1,7 @@
+---
+noPartedDevName:
+      {% for row in ansible_devices -%}
+      {%-  if (ansible_devices[row].model == "Virtual Disk") and (ansible_devices[row].partitions|length == 0) -%}
+               " {{ noPartedDevName }} +['{{ row }}']"
+      {%-  endif -%}
+      {%- endfor %}

@@ -1,0 +1,83 @@
+---
+- name: folder permission
+#  debug: msg='{{item}}'
+  file: 
+    path: '{{item}}'
+    state: directory
+    owner: '{{mongouser}}'
+    group: '{{mongouser}}'
+  become: true
+  with_items:
+    - '{{datapath}}'
+    - '{{logpath}}'
+- name: copy configuration parameter
+  template:
+    src: mongod.conf.j2
+    dest: /etc/mongod.conf
+  notify: restart mongod
+  become: true
+# selinux의 policy를 설정하기 위해서는 policycoreutils-python 가 설치되어 있어야 한다고 나옴. common role에 넣어야 할 듯.
+- name: install policycoreutils-python for SELinux
+  yum:
+    name: policycoreutils-python
+    state: present
+  become: true
+# CentOS는 SELinux가 enable되어 있다고 함. logpath와 datapath에 대해서 mongod가 사용할 수 있도록 file context를 수정해야 함
+#chcon -Rv --type=mongod_log_t /data0/mongodb
+#ls -Z 를 했을 때 이렇게 나오면 됨. unconfined_u:object_r:mongod_log_t:s0 
+- name: enable log folder writable by mongod
+  shell: 'chcon -Rv --type=mongod_log_t {{logpath}}'
+  register: chcon_logpath_result
+  become: true
+  changed_when: chcon_logpath_result.rc != 0
+# 아래처럼 module을 쓰고 싶은데 안되네..
+#  sefcontext:
+#    target: '{{logpath}}'
+#    setype: mongod_log_t
+#    seuser: unconfined_u
+#    selevel: s0
+#    state: present
+#chcon -Rv --type=mongod_var_lib_t /data1/mongo/
+- name: enable db folder writable by mongod
+  shell: 'chcon -Rv --type=mongod_var_lib_t {{datapath}}'
+  register: chcon_datapath_result
+  become: true
+  changed_when: chcon_datapath_result.rc != 0
+#  sefcontext:
+#    target: '{{datapath}}'
+#    setype: mongod_var_lib_t
+#    seuser: unconfined_u
+#    selevel: s0
+#    state: present
+
+# 아래는 mongod log의 warning에 나옴. https://docs.mongodb.com/v3.4/tutorial/transparent-huge-pages/ 참조
+- block:
+  - name: make no-thp folder
+    file: 
+      path: '/etc/tuned/no-thp'
+      state: directory
+  - name: make tuned.conf
+    copy:
+      src: tuned.conf
+      dest: /etc/tuned/no-thp
+  - name: enable no-thp
+    shell: tuned-adm profile no-thp
+    changed_when: false
+  - name: never no-thp defrag
+    # tuned.conf에 써도 defrag는 안되고 있음. bug인 듯
+    shell: >
+      /bin/echo never > /sys/kernel/mm/transparent_hugepage/defrag
+    changed_when: false
+  - name: check applying no-thp
+    shell: cat /sys/kernel/mm/transparent_hugepage/enabled
+    # 결과는 always madvise [never]
+    register: thp_enabled
+    changed_when: false
+    failed_when: not(thp_enabled.stdout.find('[never]') != -1)
+  - name: check applying no-thp defrag
+    shell: cat /sys/kernel/mm/transparent_hugepage/defrag
+    # 결과는 [always] madvise never
+    register: thp_defrag
+    changed_when: false
+    failed_when: not(thp_defrag.stdout.find('[never]') != -1)
+  become: true

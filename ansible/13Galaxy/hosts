@@ -1,0 +1,4 @@
+[webserver]
+vm1.borass01.koreacentral.cloudapp.azure.com ansible_ssh_private_key_file=/Users/bochoi/.ssh/bochoi_ebay.com
+[dbserver]
+vm2.borass01.koreacentral.cloudapp.azure.com ansible_ssh_private_key_file=/Users/bochoi/.ssh/bochoi_ebay.com

@@ -1,0 +1,7 @@
+---
+- name: start mysqld
+  service:
+    name: mysqld
+    state: started
+    enabled: true
+  become: true

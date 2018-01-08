@@ -1,0 +1,45 @@
+---
+#- name: "find not yet partitioned device name"
+#  set_fact:
+#    noPartedDevName:
+#- set_fact:
+#    str1:  ; 이렇게 하거나, 아니면 아래 처럼 script안에서 set으로 정의해도 되네?
+- name: "get partitioned dev name as , seperated string"
+  set_fact:
+    str1: |
+      {%- set str1 = None -%}
+      {%- for row in ansible_devices -%}
+      {%-  if (ansible_devices[row].model == "Virtual Disk") and (ansible_devices[row].partitions|length == 0) -%}
+      {{row}},{{str1}}
+      {%-  endif -%}
+      {%- endfor -%}
+- set_fact:
+    noPartedDevName: '{{ str1.split(",")[:-1] }}'  #\r이 들어가서 마지막 item 빼는 것이 [:-1] 임
+- debug:
+    msg: '{{ noPartedDevName }}'
+- block: 
+  - parted:
+      device: /dev/{{ item }}
+      number: 1
+      state: present
+    with_items: '{{ noPartedDevName }}'
+# 위의 것이 실패한 경우 아래것을 idempotent하게 하려면? 예를 들어 partition은 다했고 filesystem을 못만들었을때?
+  - filesystem:
+      fstype: ext4
+      dev: /dev/{{ item }}1
+#      opts: -cc ; bad block check를 하기 때문에 엄청 느림
+    with_items: '{{ noPartedDevName }}'
+# UUID로 mount하는 것이 대부분의 azure에서의 예제임
+  - command: lsblk -ln --output UUID /dev/{{ item }}1
+    register: uuid
+    with_items: '{{ noPartedDevName }}'
+  - mount:
+      path: /data{{ item.0 }}
+      src: UUID={{ item.1.stdout }}
+      fstype: ext4
+      opts: 'noatime,nofail'
+      state: mounted
+    with_indexed_items: '{{ uuid.results }}'
+  ignore_errors: true
+#  with_items: '{{ noPartedDevName }}' ; with_items가 block에는 붙을 수 없다고 함.
+  become: true

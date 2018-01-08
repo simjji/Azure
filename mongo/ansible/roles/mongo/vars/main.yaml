@@ -1,0 +1,16 @@
+---
+# 파티션도 새로 만들고, filesystem도 새로 만듬
+makePart: true
+# makePart가 true이면 반드시 lun을 list로 넘겨줘야 함
+luns: ['0','1']
+# data disk를 mount 해야하는 지 아닌 지
+mountDisk : true
+# mkfs를 돌려야 하는 지?
+mkfs: true
+fstype: xfs
+
+logpath:  /data0/mongodb
+datapath: /data1/mongo
+binding_port: 27017
+mongouser: mongod
+mongouser_pubkey: /Users/minsoojo/.ssh/minscho_ebay.com.pub

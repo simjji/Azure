@@ -1,0 +1,6 @@
+---
+- name: httpd 재시작
+  service:
+    name: httpd
+    state: restarted
+  become: True
