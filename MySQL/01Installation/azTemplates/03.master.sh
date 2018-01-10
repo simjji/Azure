@@ -27,3 +27,13 @@ az vm disk attach --vm-name mysqlTestVM01 --disk mysqlDataDisk02 --lun 1 --resou
 #disk lun 확인
 az vm show --resource-group boraMysqlRG01 --name mysqlTestVM01 | jq -r .storageProfile.dataDisks
 az vm show --resource-group boraMysqlRG01 --name mysqlTestVM01 | jq -r .storageProfile.dataDisks[].lun
+
+#개인 Vault  그룹 생성
+az group create --name boraVaultRG01 --location koreacentral
+az keyvault create --name boraVault01 --resource-group boraVaultRG01
+az keyvault secret set --vault-name 'boraVault01' --name 'boraMysqlRoot'
+
+#<pub key 파일위치>
+az keyvault secret list --vault-name boraVault01
+az keyvault secret show --vault-name boraVault01 --name boraPub01
+

@@ -22,7 +22,8 @@
   tags: initMysql
 - name: start mysql
   include_tasks: 06startMysql.yaml
-  tags: startMysql
+  tags:
+    - startMysql
 - name: securing mysql
   include_tasks: 07securingMysql.yaml
   tags: securingMysql
