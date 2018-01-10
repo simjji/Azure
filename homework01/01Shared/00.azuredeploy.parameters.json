@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vnet_name": {
-            "value": "boraVnet01"
+            "value": "jisimVnet01"
         },
         "ip_amount": {
             "value": 3

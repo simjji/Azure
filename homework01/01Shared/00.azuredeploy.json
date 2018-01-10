@@ -10,12 +10,12 @@
       }
     },
     "variables": {
-        "repoUri" : "https://raw.githubusercontent.com/ceusee/Azure/master/homework01/01Shared/"
+        "repoUri" : "https://raw.githubusercontent.com/simjji/Azure/master/homework01/01Shared/"
     },
     "resources": [
         {
             "apiVersion": "2017-05-10",
-            "name": "boraNet01",
+            "name": "jisimNet01",
             "type": "Microsoft.Resources/deployments",
             "properties": {
               "mode": "Incremental",
@@ -47,7 +47,7 @@
               }
             },
             "dependsOn": [
-                "boraNet01"
+                "jisimNet01"
             ]
         },
         {
@@ -68,7 +68,7 @@
               }
             },
             "dependsOn": [
-                "boraNet01"
+                "jisimNet01"
             ]
         },
         {
@@ -89,7 +89,7 @@
               }
             },
             "dependsOn": [
-                "boraNet01"
+                "jisimNet01"
             ]
         }
     ]
