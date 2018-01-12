@@ -28,6 +28,18 @@ az vm disk attach --vm-name mysqlTestVM01 --disk mysqlDataDisk02 --lun 1 --resou
 az vm show --resource-group jisimMysqlRG01 --name mysqlTestVM01 | jq -r .storageProfile.dataDisks
 az vm show --resource-group jisimMysqlRG01 --name mysqlTestVM01 | jq -r .storageProfile.dataDisks[].lun
 
+
+# Disk 준비 (fdisk를 사용하여 서버에서 디스크 준비)
+(echo n; echo p; echo 1; echo ; echo ; echo w) | sudo fdisk /dev/sdc
+sudo mkfs -t ext4 /dev/sdc1
+sudo mkdir /data01 && sudo mount /dev/sdc1 /data01
+#df -h 로 확인
+# 다시 부팅 후 드라이브가 다시 탑재되도록 하려면 /etc/fstab 파일에 추가해야 합니다. 이렇게 하려면 blkid 유틸리티를 사용하여 디스크의 UUID를 가져옵니다.
+sudo -i blkid
+vi /etc/fstab
+#UUID=33333333-3b3b-3c3c-3d3d-3e3e3e3e3e3e   /data01  ext4    defaults   1  2
+
+
 #개인 Vault  그룹 생성
 az group create --name jisimVaultRG01 --location koreacentral
 az keyvault create --name jisimVault --resource-group jisimVaultRG01

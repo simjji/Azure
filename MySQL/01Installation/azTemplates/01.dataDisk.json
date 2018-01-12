@@ -24,7 +24,7 @@
                 "creationData": {
                     "createOption": "Empty"
                 },
-                "diskSizeGB": 10
+                "diskSizeGB": 100
             },
             "dependsOn": []
         }
