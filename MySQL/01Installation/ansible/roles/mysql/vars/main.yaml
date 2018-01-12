@@ -13,10 +13,10 @@ logpath:  /data0/mysql/log
 datapath: /data1/mysql/data
 #binding_port: 27017
 mysqlosuser: mysql
-osadmin: bora
-vaultName: boraVault01
+osadmin: jisim
+vaultName: jisimVault
 #secretName: mysqlRoot
-secretName: boraMysqlRoot
-#mongouser_pubkey: /Users/minsoojo/.ssh/bochoi_ebay.com.pub
+secretName: jisimPub
+#mongouser_pubkey: /Users/jisim/.ssh/jisim_ebay.com.pub
 
 nofilelimit: 5120

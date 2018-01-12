@@ -40,12 +40,12 @@
         }
     },
     "variables": {
-        "netRGName":"boraNetRG02",
+        "netRGName":"jisimNetRG02",
         "subscriptionId":"[subscription().subscriptionId]"
     },
     "resources": [
         {
-            "comments": "mysql test single instance bora choi",
+            "comments": "mysql test single instance Jihun Sim",
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[parameters('vm_name')]",
             "apiVersion": "2017-03-30",
