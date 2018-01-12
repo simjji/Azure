@@ -40,7 +40,7 @@
         }
     },
     "variables": {
-        "netRGName":"boraNetRg02",
+        "netRGName":"jisimNetRg02",
         "subscriptionId":"[subscription().subscriptionId]"
     },
     "resources": [
